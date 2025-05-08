@@ -1,0 +1,460 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Bank API",
+    "description": "API for a digital wallet application.",
+    "contact": {
+      "email": "example@example.com"
+    },
+    "version": "1.0.11"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001"
+    }
+  ],
+  "tags": [
+    {
+      "name": "users",
+      "description": "Operations involving users"
+    },
+    {
+      "name": "transactions",
+      "description": "Operations involving transactions"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Create user",
+        "description": "Route used to register new users.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "xuxameneguel"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Xuxuxu_xaxaxa_123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User registered successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Password does not meet security criteria, username has an invalid pattern, or the request body has missing fields.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password must have at least 8 characters, one number, and one uppercase letter."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The username already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "The chosen username is unavailable, please choose another one."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Logs user into the application",
+        "description": "Returns an object containing a JSON Web Token that must be used in authenticated routes.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "xuxameneguel"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Xuxuxu_xaxaxa_123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "username": {
+                      "type": "string",
+                      "example": "xuxameneguel"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ4dXhhbWVuZWd1ZWwiLCJpYXQiOjE2Njg5MjM2NDUsImV4cCI6MTY2OTAxMDA0NX0.iZunlwSFgBIJ6ZHUtkTpt0NMmeaI8IUge3Eusm3_xKI"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request body contains invalid or missing data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "All fields must be filled."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Username or password incorrect.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Incorrect username or password."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/balance": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Access balance",
+        "description": "Returns the available balance in the user's account based on the token contained in the request headers.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "balance": {
+                      "type": "number",
+                      "example": 100
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, invalid, or expired token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid or expired token."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions": {
+      "post": {
+        "tags": ["transactions"],
+        "summary": "Perform transaction",
+        "description": "Route used to transfer money to another user's account.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "xuxameneguel"
+                  },
+                  "value": {
+                    "type": "number",
+                    "example": 25
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction completed successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request body data is invalid or missing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "All fields must be filled."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid transaction data, please check if the username is correct."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Insufficient balance to perform the transaction.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "You do not have enough balance to perform this transaction."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["transactions"],
+        "summary": "Get transactions",
+        "description": "Route used to retrieve user transactions. Can be filtered by type (cash-in/cash-out) and date.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filters transfers made (cashout) and received (cashin). When this parameter is not provided, transactions of both types are returned.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["cashout", "cashin"]
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Date in MM/DD/YYYY format marking the beginning of the period filter range. When not provided, transactions from all periods are returned.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Date in MM/DD/YYYY format marking the end of the period filter range. When not provided, the current date is considered.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "value": {
+                        "type": "number"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "debitedAccount": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "username": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "creditedAccount": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "username": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid or expired token."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
