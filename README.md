@@ -1,5 +1,3 @@
-# :coin: Full Stack Bank :dollar:
-
 ![Preview](./screenshots/login.png)
 
 ## :page_with_curl: About
@@ -15,17 +13,9 @@ Full stack digital wallet application developed in Next.js and Node.js with Type
 - TypeScript
 - React.js
 - Next.js
-- Sass
-- Cypress
-- Testing Library
 - Node.js
 - Express.js
-- Sequelize.js
 - PortgreSQL
-- Swagger UI
-- Mocha.js
-- Chai.js
-- Sinon.js
 - Docker
 - Docker Compose
 
@@ -35,7 +25,7 @@ Full stack digital wallet application developed in Next.js and Node.js with Type
 
 To run this application you need to have **Git**, **Docker**, **Node** and **Docker Compose** installed on your computer. Docker Compose needs to be version **2.5.0** or higher and Node version **16**.
 
-In addition, to run the step-by-step commands below, your operating system must also have a **Bash terminal** installed. If you are using **Linux** or **macOS**, Bash is already installed by default. However, if your system is **Windows**, you may need to do [separate installation](https://www.lifewire.com/install-bash-on-windows-10-4101773).
+In addition, to run the step-by-step commands below, your operating system must also have a **Bash terminal** installed. If you are using **Linux** or **macOS**, Bash is already installed by default. However, if your system is **Windows**, you may need to do install WSL- windows subsytem for linux
 
 ### 1. In the project root directory, run the command below in the terminal to install the dependencies
 
@@ -85,61 +75,3 @@ With the application running, access the <http://localhost:3001/docs> address in
 
 ![API documentation/Documentação da API](./screenshots/api-docs.png)
 
-## :test_tube: Tests
-
-### Integration
-
-<details>
-
-implement backend integration tests with 100% coverage. To check their result, run the command below in the project root directory:
-
-```sh
-npm run test: integration
-```
-
-**Note:** to run the integration tests, it is not necessary for the application to be running, as the interaction with the database is mocked and the tests start an instance of the API before being started.
-<br />
-
-</details>
-
-![Cobertura dos testes de integração](./screenshots/integration-coverage.png)
-
-### E2E (End-to-End)
-
-<details>
-
-implement some E2E tests with the Cypress framework in conjunction with the Testing Library to use semantic selectors. **Applications must be running** before running E2E tests.
-
-To open Cypress in the browser, run the command in the project root directory:
-
-```sh
-npm run test:e2e:open
-```
-
-A window will open with the list of specs, just click one of them to start the tests.
-
-If you prefer, it is also possible to run the E2E tests without the graphical interface by using the command below:
-
-```sh
-npm run test:e2e
-```
-
-<br />
-</details>
-
-![Cypress](./screenshots/cypress.png)
-
-### Run all tests
-
-<details>
-
-Run the command below in the project root directory tp run all integration and E2E tests in sequence in your terminal:
-
-```sh
-npm run test
-```
-
-**Note:** this command runs the E2E tests without the graphic interface.
-<br />
-
-</details>
